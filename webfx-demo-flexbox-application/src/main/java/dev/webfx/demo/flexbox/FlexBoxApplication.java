@@ -20,12 +20,13 @@ import java.util.Arrays;
 
 public class FlexBoxApplication extends Application {
 
-    private final static String SENTENCE = "Move the bars to see how the flexbox layouts the words, each word being embed in an individual node.";
+    private final static String SENTENCE = "Move the bar to see how the words are positioned, each word being embed in a node controlled by the flexbox.";
     private final static String[] WORDS = SENTENCE.split(" ");
     private final static Font FONT = Font.font(48);
-    private final static Insets MARGIN = new Insets(10);
+    private final static Insets WORD_MARGIN = new Insets(10);
+    private final static int FLEXBOX_SPACE = 10;
 
-    private static Color COLOR = Color.PURPLE; // Initial value
+    private Color nodeColor = Color.PURPLE; // Initial node color
 
     @Override
     public void start(Stage primaryStage) {
@@ -33,20 +34,21 @@ public class FlexBoxApplication extends Application {
         primaryStage.show();
     }
 
-    private static FlexBox createFlexBox() {
-        FlexBox flexBox = new FlexBox(Arrays.stream(WORDS).map(FlexBoxApplication::createWordNode).toArray(Node[]::new));
-        flexBox.setHorizontalSpace(10);
-        flexBox.setVerticalSpace(10);
+    private FlexBox createFlexBox() {
+        FlexBox flexBox = new FlexBox(Arrays.stream(WORDS).map(this::createWordNode).toArray(Node[]::new));
+        flexBox.setHorizontalSpace(FLEXBOX_SPACE);
+        flexBox.setVerticalSpace(FLEXBOX_SPACE);
         return flexBox;
     }
 
-    private static Node createWordNode(String word) {
+    private Node createWordNode(String word) {
         Text wordText = new Text(word);
         wordText.setFont(FONT);
         wordText.setFill(Color.WHITE);
-        StackPane stackPane = setBackgroundColor(COLOR, new StackPane(wordText));
-        COLOR = COLOR.deriveColor(20, 1d, 1d, 1d);
-        StackPane.setMargin(wordText, MARGIN);
+        StackPane stackPane = setBackgroundColor(nodeColor, new StackPane(wordText));
+        StackPane.setMargin(wordText, WORD_MARGIN);
+        // Rotating color for next node
+        nodeColor = nodeColor.deriveColor(20, 1d, 1d, 1d);
         return stackPane;
     }
 
