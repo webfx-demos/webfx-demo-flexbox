@@ -1,3 +1,4 @@
+
 package dev.webfx.demo.flexbox;
 
 import dev.webfx.extras.flexbox.FlexBox;
@@ -19,11 +20,12 @@ import java.util.Arrays;
 
 public class FlexBoxApplication extends Application {
 
-    private final static String[] TOKENS = "No kidding -- Lorenzo called off his trip to visit Mexico City just because they told him the conquistadores were extinct.".split(" ");
+    private final static String SENTENCE = "Move the bars to see how the flexbox layouts the words, each word being embed in an individual node.";
+    private final static String[] WORDS = SENTENCE.split(" ");
     private final static Font FONT = Font.font(48);
     private final static Insets MARGIN = new Insets(10);
 
-    private static Color COLOR = Color.PURPLE;
+    private static Color COLOR = Color.PURPLE; // Initial value
 
     @Override
     public void start(Stage primaryStage) {
@@ -32,19 +34,19 @@ public class FlexBoxApplication extends Application {
     }
 
     private static FlexBox createFlexBox() {
-        FlexBox flexBox = new FlexBox(Arrays.stream(TOKENS).map(FlexBoxApplication::createNode).toArray(Node[]::new));
+        FlexBox flexBox = new FlexBox(Arrays.stream(WORDS).map(FlexBoxApplication::createWordNode).toArray(Node[]::new));
         flexBox.setHorizontalSpace(10);
         flexBox.setVerticalSpace(10);
         return flexBox;
     }
 
-    private static Node createNode(String token) {
-        Text svgText = new Text(token);
-        svgText.setFont(FONT);
-        svgText.setFill(Color.WHITE);
-        StackPane stackPane = setBackgroundColor(COLOR, new StackPane(svgText));
+    private static Node createWordNode(String word) {
+        Text wordText = new Text(word);
+        wordText.setFont(FONT);
+        wordText.setFill(Color.WHITE);
+        StackPane stackPane = setBackgroundColor(COLOR, new StackPane(wordText));
         COLOR = COLOR.deriveColor(20, 1d, 1d, 1d);
-        StackPane.setMargin(svgText, MARGIN);
+        StackPane.setMargin(wordText, MARGIN);
         return stackPane;
     }
 
