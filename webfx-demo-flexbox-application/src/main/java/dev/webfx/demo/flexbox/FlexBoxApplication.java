@@ -4,13 +4,13 @@ package dev.webfx.demo.flexbox;
 import dev.webfx.extras.flexbox.FlexBox;
 import javafx.application.Application;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Slider;
 import javafx.scene.control.SplitPane;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -23,22 +23,39 @@ public class FlexBoxApplication extends Application {
     private final static String SENTENCE = "Move the bar to see how the words are positioned, each word being embed in a node controlled by the flexbox.";
     private final static String[] WORDS = SENTENCE.split(" ");
     private final static Font FONT = Font.font(48);
-    private final static Insets WORD_MARGIN = new Insets(10);
-    private final static int FLEXBOX_SPACE = 10;
-
+    private final Slider spaceSlider = new Slider(0, 20, 10);
+    private final Slider marginSlider = new Slider(0, 20, 10);
+    private final CheckBox spaceTopCheckBox = new CheckBox("Top"), spaceLeftCheckBox = new CheckBox("Left"), spaceRightCheckBox = new CheckBox("Right");
     private Color nodeColor = Color.PURPLE; // Initial node color
+    private final FlexBox[] flexBoxes = { createFlexBox(), createFlexBox() };
 
     @Override
     public void start(Stage primaryStage) {
-        primaryStage.setScene(new Scene(setBackgroundColor(Color.BLACK, new SplitPane(createFlexBox(), createFlexBox())), 800, 600));
+        BorderPane borderPane = new BorderPane(setBackgroundColor(Color.BLACK, new SplitPane(flexBoxes)));
+        HBox hBox = new HBox(10, new Text("Word margin:"), marginSlider, new Text("Spacing:"), spaceSlider, spaceTopCheckBox, spaceLeftCheckBox, spaceRightCheckBox);
+        hBox.setAlignment(Pos.CENTER);
+        BorderPane.setMargin(hBox, new Insets(10));
+        borderPane.setBottom(hBox);
+        primaryStage.setScene(new Scene(borderPane, 800, 600));
         primaryStage.show();
+        marginSlider.valueProperty().addListener((observableValue, oldValue, newValue) -> updateWordMargin());
     }
 
     private FlexBox createFlexBox() {
         FlexBox flexBox = new FlexBox(Arrays.stream(WORDS).map(this::createWordNode).toArray(Node[]::new));
-        flexBox.setHorizontalSpace(FLEXBOX_SPACE);
-        flexBox.setVerticalSpace(FLEXBOX_SPACE);
+        // Bindings
+        flexBox.horizontalSpaceProperty().bind(spaceSlider.valueProperty());
+        flexBox.verticalSpaceProperty().bind(spaceSlider.valueProperty());
+        flexBox.spaceTopProperty().bind(spaceTopCheckBox.selectedProperty());
+        flexBox.spaceLeftProperty().bind(spaceLeftCheckBox.selectedProperty());
+        flexBox.spaceRightProperty().bind(spaceRightCheckBox.selectedProperty());
         return flexBox;
+    }
+
+    private void updateWordMargin() {
+        Insets margin = new Insets(marginSlider.getValue());
+        for (FlexBox flexBox : flexBoxes)
+            flexBox.getChildren().forEach(wordNode -> StackPane.setMargin(((StackPane) wordNode).getChildren().get(0), margin));
     }
 
     private Node createWordNode(String word) {
@@ -46,7 +63,6 @@ public class FlexBoxApplication extends Application {
         wordText.setFont(FONT);
         wordText.setFill(Color.WHITE);
         StackPane stackPane = setBackgroundColor(nodeColor, new StackPane(wordText));
-        StackPane.setMargin(wordText, WORD_MARGIN);
         // Rotating color for next node
         nodeColor = nodeColor.deriveColor(20, 1d, 1d, 1d);
         return stackPane;
