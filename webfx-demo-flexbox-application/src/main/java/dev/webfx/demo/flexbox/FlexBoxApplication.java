@@ -25,17 +25,21 @@ public class FlexBoxApplication extends Application {
     private final static Font FONT = Font.font(48);
     private final Slider spaceSlider = new Slider(0, 20, 10);
     private final Slider marginSlider = new Slider(0, 20, 10);
-    private final CheckBox spaceTopCheckBox = new CheckBox("Top"), spaceLeftCheckBox = new CheckBox("Left"), spaceRightCheckBox = new CheckBox("Right");
+    private final CheckBox spaceTopCheckBox = new CheckBox("Top"),
+            spaceLeftCheckBox = new CheckBox("Left"),
+            spaceRightCheckBox = new CheckBox("Right"),
+            lastRowCheckBox = new CheckBox("Last row");
     private Color nodeColor = Color.PURPLE; // Initial node color
     private final FlexBox[] flexBoxes = { createFlexBox(), createFlexBox() };
 
     @Override
     public void start(Stage primaryStage) {
+        lastRowCheckBox.setSelected(true);
         BorderPane borderPane = new BorderPane(setBackgroundColor(Color.BLACK, new SplitPane(flexBoxes)));
-        HBox hBox = new HBox(10, new Text("Word margin:"), marginSlider, new Text("Spacing:"), spaceSlider, spaceTopCheckBox, spaceLeftCheckBox, spaceRightCheckBox);
-        hBox.setAlignment(Pos.CENTER);
-        BorderPane.setMargin(hBox, new Insets(10));
-        borderPane.setBottom(hBox);
+        HBox settingsBox = new HBox(10, new Text("Words margin:"), marginSlider, new Text("Spacing:"), spaceSlider, spaceTopCheckBox, spaceLeftCheckBox, spaceRightCheckBox, lastRowCheckBox);
+        settingsBox.setAlignment(Pos.CENTER);
+        BorderPane.setMargin(settingsBox, new Insets(10));
+        borderPane.setTop(settingsBox);
         primaryStage.setScene(new Scene(borderPane, 800, 600));
         primaryStage.show();
         marginSlider.valueProperty().addListener((observableValue, oldValue, newValue) -> updateWordMargin());
@@ -49,6 +53,7 @@ public class FlexBoxApplication extends Application {
         flexBox.spaceTopProperty().bind(spaceTopCheckBox.selectedProperty());
         flexBox.spaceLeftProperty().bind(spaceLeftCheckBox.selectedProperty());
         flexBox.spaceRightProperty().bind(spaceRightCheckBox.selectedProperty());
+        flexBox.flexLastRowProperty().bind(lastRowCheckBox.selectedProperty());
         return flexBox;
     }
 
