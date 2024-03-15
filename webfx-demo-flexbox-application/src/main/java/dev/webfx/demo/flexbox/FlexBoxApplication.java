@@ -1,7 +1,7 @@
 
 package dev.webfx.demo.flexbox;
 
-import dev.webfx.extras.flexbox.FlexBox;
+import dev.webfx.extras.panes.FlexPane;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -30,12 +30,12 @@ public class FlexBoxApplication extends Application {
             spaceRightCheckBox = new CheckBox("Right"),
             lastRowCheckBox = new CheckBox("Last row");
     private Color nodeColor = Color.PURPLE; // Initial node color
-    private final FlexBox[] flexBoxes = { createFlexBox(), createFlexBox() };
+    private final FlexPane[] flexPanes = { createFlexBox(), createFlexBox() };
 
     @Override
     public void start(Stage primaryStage) {
         lastRowCheckBox.setSelected(true);
-        BorderPane borderPane = new BorderPane(setBackgroundColor(Color.BLACK, new SplitPane(flexBoxes)));
+        BorderPane borderPane = new BorderPane(setBackgroundColor(Color.BLACK, new SplitPane(flexPanes)));
         HBox settingsBox = new HBox(10, new Text("Words margin:"), marginSlider, new Text("Spacing:"), spaceSlider, spaceTopCheckBox, spaceLeftCheckBox, spaceRightCheckBox, lastRowCheckBox);
         settingsBox.setAlignment(Pos.CENTER);
         BorderPane.setMargin(settingsBox, new Insets(10));
@@ -45,22 +45,22 @@ public class FlexBoxApplication extends Application {
         marginSlider.valueProperty().addListener((observableValue, oldValue, newValue) -> updateWordMargin());
     }
 
-    private FlexBox createFlexBox() {
-        FlexBox flexBox = new FlexBox(Arrays.stream(WORDS).map(this::createWordNode).toArray(Node[]::new));
+    private FlexPane createFlexBox() {
+        FlexPane flexPane = new FlexPane(Arrays.stream(WORDS).map(this::createWordNode).toArray(Node[]::new));
         // Bindings
-        flexBox.horizontalSpaceProperty().bind(spaceSlider.valueProperty());
-        flexBox.verticalSpaceProperty().bind(spaceSlider.valueProperty());
-        flexBox.spaceTopProperty().bind(spaceTopCheckBox.selectedProperty());
-        flexBox.spaceLeftProperty().bind(spaceLeftCheckBox.selectedProperty());
-        flexBox.spaceRightProperty().bind(spaceRightCheckBox.selectedProperty());
-        flexBox.flexLastRowProperty().bind(lastRowCheckBox.selectedProperty());
-        return flexBox;
+        flexPane.horizontalSpaceProperty().bind(spaceSlider.valueProperty());
+        flexPane.verticalSpaceProperty().bind(spaceSlider.valueProperty());
+        flexPane.spaceTopProperty().bind(spaceTopCheckBox.selectedProperty());
+        flexPane.spaceLeftProperty().bind(spaceLeftCheckBox.selectedProperty());
+        flexPane.spaceRightProperty().bind(spaceRightCheckBox.selectedProperty());
+        flexPane.flexLastRowProperty().bind(lastRowCheckBox.selectedProperty());
+        return flexPane;
     }
 
     private void updateWordMargin() {
         Insets margin = new Insets(marginSlider.getValue());
-        for (FlexBox flexBox : flexBoxes)
-            flexBox.getChildren().forEach(wordNode -> StackPane.setMargin(((StackPane) wordNode).getChildren().get(0), margin));
+        for (FlexPane flexPane : flexPanes)
+            flexPane.getChildren().forEach(wordNode -> StackPane.setMargin(((StackPane) wordNode).getChildren().get(0), margin));
     }
 
     private Node createWordNode(String word) {

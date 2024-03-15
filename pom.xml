@@ -36,6 +36,7 @@
         <module>webfx-demo-flexbox-application</module>
         <module>webfx-demo-flexbox-application-gluon</module>
         <module>webfx-demo-flexbox-application-gwt</module>
+        <module>webfx-demo-flexbox-application-j2cl</module>
         <module>webfx-demo-flexbox-application-openjfx</module>
     </modules>
 

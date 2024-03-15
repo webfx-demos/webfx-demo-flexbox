@@ -6,7 +6,7 @@ module webfx.demo.flexbox.application {
     requires java.base;
     requires javafx.controls;
     requires javafx.graphics;
-    requires webfx.extras.flexbox;
+    requires webfx.extras.panes;
 
     // Exported packages
     exports dev.webfx.demo.flexbox;
