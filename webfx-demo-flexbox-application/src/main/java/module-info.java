@@ -3,7 +3,6 @@
 module webfx.demo.flexbox.application {
 
     // Direct dependencies modules
-    requires java.base;
     requires javafx.controls;
     requires javafx.graphics;
     requires webfx.extras.panes;
