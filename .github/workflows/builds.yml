@@ -33,7 +33,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        app: [{name: 'FlexBox', module-token: 'webfx-demo-flexbox', gwt-token: 'webfx_demo_flexbox', gwt-push-branch: 'flexpane-gwt', j2cl-push-branch: 'flexpane', ios-bundle-id: 'dev.webfx.demo.flexbox', version: '0.1.0-SNAPSHOT'}]
+        app: [{name: 'FlexPane', module-token: 'webfx-demo-flexpane', gwt-token: 'webfx_demo_flexpane', gwt-push-branch: 'flexpane-gwt', j2cl-push-branch: 'flexpane', ios-bundle-id: 'dev.webfx.demo.flexpane', version: '0.1.0-SNAPSHOT'}]
         os-config:  [1]
         include:
           - os-config: 1 # Generates builds 1) 2) 3) 4) & 5)
